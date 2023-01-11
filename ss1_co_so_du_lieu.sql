@@ -1,8 +1,8 @@
 create database `ss1_co_so_du_lieu`;
 use `ss1_co_so_du_lieu`;
 create table class (
-    id INT,
-    `name` VARCHAR(50)
+    id int,
+    `name` varchar(50)
 );
 alter table class add primary key (id);
 insert into class (id,name) values (1,'Nguyễn Văn A');
