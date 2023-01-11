@@ -1,6 +1,6 @@
 create database `ss1_co_so_du_lieu`;
 use `ss1_co_so_du_lieu`;
-CREATE TABLE class (
+create table class (
     id INT,
     `name` VARCHAR(50)
 );
