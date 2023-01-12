@@ -1,5 +1,5 @@
-create database `ss2_chuyen_doi_erd_sang_mo_hinh_quan_he`;
-use `ss2_chuyen_doi_erd_sang_mo_hinh_quan_he`;
+create database `quan_Ly_vat_tu`;
+use `quan_ly_vat_tu`;
 CREATE TABLE nha_cung_cap (
     ma_nha_cung_cap INT PRIMARY KEY,
     ten_nha_cung_cap VARCHAR(50),
@@ -45,7 +45,6 @@ CREATE TABLE chi_tiet_phieu_nhap (
         REFERENCES phieu_nhap (so_phieu_nhap)
 );
 CREATE TABLE don_dat_hang (
-
     so_dat_hang INT PRIMARY KEY,
     ngay_dat_hang VARCHAR(20),
     nha_cung_cap_ma_nha_cung_cap INT,
@@ -60,5 +59,5 @@ CREATE TABLE chi_tiet_don_dat_hang (
     FOREIGN KEY (don_dat_hang_so_dat_hang)
         REFERENCES don_dat_hang (so_dat_hang)
 );
-DROP DATABASE `ss2_chuyen_doi_erd_sang_mo_hinh_quan_he`;
+DROP DATABASE `quan_ly_vat_tu`;
 
