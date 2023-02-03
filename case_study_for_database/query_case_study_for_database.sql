@@ -79,17 +79,28 @@ GROUP BY dich_vu.ma_dich_vu
 ORDER BY dich_vu.ma_dich_vu;
 -- Task 7.	Hiển thị thông tin ma_dich_vu, ten_dich_vu, dien_tich, so_nguoi_toi_da, chi_phi_thue, ten_loai_dich_vu của tất cả các loại dịch vụ đã từng được khách hàng đặt phòng trong năm 2020
 -- nhưng chưa từng được khách hàng đặt phòng trong năm 2021.
-select dich_vu.ma_dich_vu, dich_vu.ten_dich_vu, dich_vu.dien_tich, dich_vu.so_nguoi_toi_da, dich_vu.chi_phi_thue, loai_dich_vu.ten_loai_dich_vu
-from dich_vu
-join loai_dich_vu on loai_dich_vu.ma_loai_dich_vu = dich_vu.ma_loai_dich_vu
-join hop_dong on dich_vu.ma_dich_vu = hop_dong.ma_dich_vu
-where 
-dich_vu.ma_dich_vu not in (
-select hop_dong.ma_dich_vu
-from hop_dong
-where year(hop_dong.ngay_lam_hop_dong) = 2021
-and year(hop_dong.ngay_lam_hop_dong) != 2020)
-group by dich_vu.ten_dich_vu;
+SELECT 
+    dich_vu.ma_dich_vu,
+    dich_vu.ten_dich_vu,
+    dich_vu.dien_tich,
+    dich_vu.so_nguoi_toi_da,
+    dich_vu.chi_phi_thue,
+    loai_dich_vu.ten_loai_dich_vu
+FROM
+    dich_vu
+        JOIN
+    loai_dich_vu ON loai_dich_vu.ma_loai_dich_vu = dich_vu.ma_loai_dich_vu
+        JOIN
+    hop_dong ON dich_vu.ma_dich_vu = hop_dong.ma_dich_vu
+WHERE
+    dich_vu.ma_dich_vu NOT IN (SELECT 
+            hop_dong.ma_dich_vu
+        FROM
+            hop_dong
+        WHERE
+            YEAR(hop_dong.ngay_lam_hop_dong) = 2021
+                AND YEAR(hop_dong.ngay_lam_hop_dong) != 2020)
+GROUP BY dich_vu.ten_dich_vu;
 SET sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 -- and not exists (select * from hop_dong where hop_dong.ngay_lam_hop_dong = 2021) 
 -- Task 8.	Hiển thị thông tin ho_ten khách hàng có trong hệ thống, với yêu cầu ho_ten không trùng nhau.
@@ -145,26 +156,41 @@ GROUP BY dich_vu_di_kem.ma_dich_vu_di_kem;
 -- Task 12.	Hiển thị thông tin ma_hop_dong, ho_ten (nhân viên), ho_ten (khách hàng), so_dien_thoai (khách hàng), ten_dich_vu, so_luong_dich_vu_di_kem 
 -- (được tính dựa trên việc sum so_luong ở dich_vu_di_kem), tien_dat_coc của tất cả các dịch vụ đã từng được khách hàng đặt vào 3 tháng cuối năm 2020
 -- nhưng chưa từng được khách hàng đặt vào 6 tháng đầu năm 2021
-select hd.ma_hop_dong, nv.ho_ten as ho_ten_nv, kh.ho_ten as ho_ten_kh, kh.so_dien_thoai as so_dien_thoai_kh, dv.ten_dich_vu, sum(ifnull(hdct.so_luong,0)) as so_luong_dich_vu_di_kem, hd.tien_dat_coc
-from hop_dong as hd
-join nhan_vien as nv on hd.ma_nhan_vien = nv.ma_nhan_vien
-join khach_hang as kh on hd.ma_khach_hang = kh.ma_khach_hang
-join dich_vu as dv on hd.ma_dich_vu = dv.ma_dich_vu
-left join hop_dong_chi_tiet as hdct on hd.ma_hop_dong = hdct.ma_hop_dong
-left join dich_vu_di_kem as dvdk on dvdk.ma_dich_vu_di_kem = hdct.ma_dich_vu_di_kem
-where (month(hd.ngay_lam_hop_dong) between 10 and 12 and year(hd.ngay_lam_hop_dong) =2020)
-group by hd.ma_hop_dong;
--- còn đoạn nhưng chưa từng...
+SELECT 
+    hd.ma_hop_dong,
+    nv.ho_ten as ho_ten_nv,
+    kh.ho_ten as ho_ten_kh,
+    kh.so_dien_thoai as so_dien_thoai_kh,
+    dv.ten_dich_vu,
+    IFNULL(SUM(so_luong), 0) so_luong_dich_vu_di_kem,
+    tien_dat_coc
+FROM
+    hop_dong hd
+        LEFT JOIN
+    nhan_vien nv ON hd.ma_nhan_vien = nv.ma_nhan_vien
+        LEFT JOIN
+    khach_hang kh ON hd.ma_khach_hang = kh.ma_khach_hang
+        LEFT JOIN
+    dich_vu dv ON hd.ma_dich_vu = dv.ma_dich_vu
+        LEFT JOIN
+    hop_dong_chi_tiet hdct ON hd.ma_hop_dong = hdct.ma_hop_dong
+WHERE
+    (QUARTER(ngay_lam_hop_dong) = 4
+        AND YEAR(ngay_lam_hop_dong) = 2020)
+        AND hd.ma_hop_dong NOT IN (MONTH(ngay_lam_hop_dong) BETWEEN 1 AND 6
+        AND YEAR(ngay_lam_hop_dong) = 2021)
+GROUP BY hd.ma_hop_dong;
 -- Task 13.	Hiển thị thông tin các Dịch vụ đi kèm được sử dụng nhiều nhất bởi các Khách hàng đã đặt phòng.
+create view view_dich_vu_di_kem as 
+select sum(ifnull(so_luong,0)) as so_luong_dich_vu_di_kem 
+from hop_dong_chi_tiet
+group by ma_dich_vu_di_kem;
 select dich_vu_di_kem.ma_dich_vu_di_kem, dich_vu_di_kem.ten_dich_vu_di_kem, dich_vu_di_kem.gia, dich_vu_di_kem.don_vi, dich_vu_di_kem.trang_thai,
 sum(ifnull(hop_dong_chi_tiet.so_luong,0)) as so_luong_dich_vu_di_kem
 from hop_dong_chi_tiet as hdct
 join dich_vu_di_kem as dvdk on dvdk.ma_dich_vu_di_kem = hdct.ma_dich_vu_di_kem
-group by hop_dong_chi_tiet.ma_dich_vu_di_kem
-HAVING SUM(IFNULL(hop_dong_chi_tiet.so_luong, 0)) = (SELECT 
-        MAX(so_luong)
-    FROM
-        hop_dong_chi_tiet);
+group by hdct.ma_dich_vu_di_kem
+having so_luong_dich_vu_di_kem = (select max(view_dich_vu_di_kem.so_luong_dich_vu_di_kem)from view_dich_vu_di_kem); 
 -- mới đúng 1 nửa
 -- Task 14.	Hiển thị thông tin tất cả các Dịch vụ đi kèm chỉ mới được sử dụng một lần duy nhất. Thông tin hiển thị bao gồm ma_hop_dong,
 -- ten_loai_dich_vu, ten_dich_vu_di_kem, so_lan_su_dung
