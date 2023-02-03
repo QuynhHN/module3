@@ -254,10 +254,48 @@ WHERE
 -- SET SQL_SAFE_UPDATES = 0;
 -- Task 17.	Cập nhật thông tin những khách hàng có ten_loai_khach từ Platinum lên Diamond,
 -- chỉ cập nhật những khách hàng đã từng đặt phòng với Tổng Tiền thanh toán trong năm 2021 là lớn hơn 10.000.000 VNĐ.
-update khach_hang
-set Platinum = Diamond;
--- where ma_khach_hang in (select ma_khach_hang from khach_hang join hop_dong on hop_dong.ma_khach_hang = khach_hang.ma_khach_hang  where
--- chưa tính được tổng tiền
+CREATE VIEW v_tong_tien AS
+    SELECT 
+        kh.ma_khach_hang,
+        lk.ten_loai_khach,
+        SUM(IFNULL(dv.chi_phi_thue, 0) + IFNULL(hdct.so_luong, 0) * IFNULL(dvdk.gia, 0)) tong_tien
+    FROM
+        khach_hang kh
+            JOIN
+        loai_khach lk ON lk.ma_loai_khach = kh.ma_loai_khach
+            JOIN
+        hop_dong hd ON hd.ma_khach_hang = kh.ma_khach_hang
+            JOIN
+        dich_vu dv ON dv.ma_dich_vu = hd.ma_dich_vu
+            JOIN
+        hop_dong_chi_tiet hdct ON hdct.ma_hop_dong = hd.ma_hop_dong
+            JOIN
+        dich_vu_di_kem dvdk ON dvdk.ma_dich_vu_di_kem = hdct.ma_dich_vu_di_kem
+    WHERE
+        lk.ten_loai_khach = 'Platinium'
+            AND YEAR(ngay_lam_hop_dong) = 2021
+    GROUP BY lk.ma_loai_khach , kh.ma_khach_hang;
+
+UPDATE khach_hang 
+SET 
+    ma_loai_khach = 1
+WHERE
+    ma_khach_hang = (SELECT 
+            v_tong_tien.ma_khach_hang
+        FROM
+            v_tong_tien
+        WHERE
+            v_tong_tien.tong_tien > '1000000'
+                AND ten_loai_khach = 'Platinium');
+
+SELECT 
+    kh.ma_khach_hang, kh.ho_ten, lk.ten_loai_khach
+FROM
+    khach_hang kh
+        JOIN
+    loai_khach lk ON kh.ma_loai_khach = lk.ma_loai_khach
+WHERE
+    kh.ho_ten = 'Nguyễn Tâm Đắc';
 -- Task 18.	Xóa những khách hàng có hợp đồng trước năm 2021 (chú ý ràng buộc giữa các bảng).
 DELETE FROM khach_hang 
 WHERE
