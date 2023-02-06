@@ -1,0 +1,171 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.col-1 {
+    width: 8.33%;
+}
+
+.col-2 {
+    width: 16.66%;
+}
+
+.col-3 {
+    width: 25%;
+}
+
+.col-4 {
+    width: 33.33%;
+}
+
+.col-5 {
+    width: 41.66%;
+}
+
+.col-6 {
+    width: 50%;
+}
+
+.col-7 {
+    width: 58.33%;
+}
+
+.col-8 {
+    width: 66.66%;
+}
+
+.col-9 {
+    width: 75%;
+}
+
+.col-10 {
+    width: 83.33%;
+}
+
+.col-11 {
+    width: 91.66%;
+}
+
+.col-12 {
+    width: 100%;
+}
+
+[class *="col-"] {
+    float: left;
+}
+
+.row::after {
+    display: block;
+    clear: both;
+    content: "";
+}
+.header{
+    background-color: #100f0f;
+    color: #f1f1f1;
+}
+.menu {
+    height: 40px;
+    padding: 0;
+    margin: 0;
+    background-color: #090808;
+    border: 1px solid #f5f1f1;
+}
+
+/*.menu ul, .menu li {*/
+/*    padding: 0;*/
+/*    margin: 0;*/
+/*}*/
+
+.menu li {
+    position: relative;
+    float: left;
+    list-style: none;
+    margin: 10px;
+    padding: 0;
+    /*color: #eaf2f6;*/
+}
+.menu li a {
+    width: 50px;
+    height: 20px;
+    display: block;
+    /*hủy đường kẻ*/
+    text-decoration: none;
+    /*sắp xếp theo chiều ngang*/
+    text-align: center;
+    line-height: 10px;
+    background-color: black;
+    color: white;
+}
+ ul li a {
+    width: 200px;
+    text-align: left;
+    padding-left: 20px;
+    color: black;
+}
+.login{
+    position: absolute;
+    top: 8px;
+    right: 6px;
+    text-decoration: none;
+    color: white;
+}
+
+.main1{
+    background-color: #eceaea;
+    text-align: center;
+    height: 500px;
+}
+
+.main2{
+    padding-left: 15px;
+    padding-top: 10px;
+}
+
+.main3{
+    background-color: #eceaea;
+    height: 500px;
+}
+
+.title{
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.test{
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+.link{
+    margin-top: 20px;
+}
+
+.ads{
+    border: 1px solid #f1f0f0;
+    background-color: #f1f0f0;
+    text-align: center;
+    width: 60%;
+    margin: 0 auto;
+    margin-top: 30px;
+    height: 60px;
+    line-height: 60px;
+    justify-content: center;
+}
+
+.footer{
+    background-color: grey;
+    color: black;
+    height: 50px;
+    text-align: center;
+    padding-top: 17px;
+}
+@media screen and (max-width: 768px){
+    [class*="col-"]{
+        width: 100%;
+    }
+    .header{
+        background: #100f0f;
+    }
+}
