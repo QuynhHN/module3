@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create a simple gallery using Bootstrap</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="style_gallery.css">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12 fw-bold fs-4 pl-2 mt-3">Responsive Image Gallery</div>
+    </div>
+    <div class="row">
+        <div class="col-12 fw-bolder fs-6 mt-3">Resize the browser window to see the effect.</div>
+    </div>
+    <div class="row">
+        <div class="col-12 col-lg-3 col-md-6 mt-3 d-inline-flex justify-content-center">
+            <div class="decoration">
+                <a target="_blank" href="http://demo.codegym.vn/web/15/gallery/img_fjords.jpg">
+                    <img src="http://demo.codegym.vn/web/15/gallery/img_fjords.jpg" width="280px" height="200px" alt="">
+                    <div class="description text-center">Add a description of the image here</div>
+                </a>
+            </div>
+        </div>
+        <div class="col-12 col-lg-3 col-md-6 mt-3 d-inline-flex justify-content-center">
+            <div class="decoration">
+                <a target="_blank" href="http://demo.codegym.vn/web/15/gallery/img_forest.jpg">
+                    <img src="http://demo.codegym.vn/web/15/gallery/img_forest.jpg" width="280px" height="200px" alt="">
+                    <div class="description text-center">Add a description of the image here</div>
+                </a>
+            </div>
+        </div>
+        <div class="col-12 col-lg-3 col-md-6 mt-3 d-inline-flex justify-content-center">
+            <div class="decoration">
+                <a target="_blank" href="http://demo.codegym.vn/web/15/gallery/img_lights.jpg.jpg">
+                    <img src="http://demo.codegym.vn/web/15/gallery/img_lights.jpg" width="280px" height="200px" alt="">
+                    <div class="description text-center">Add a description of the image here</div>
+                </a>
+            </div>
+        </div>
+        <div class="col-12 col-lg-3 col-md-6 mt-3 d-inline-flex justify-content-center">
+            <div class="decoration">
+                <a target="_blank" href="http://demo.codegym.vn/web/15/gallery/img_mountains.jpg">
+                    <img src="http://demo.codegym.vn/web/15/gallery/img_mountains.jpg" width="280px" height="200px"
+                         alt="">
+                    <div class="description text-center">Add a description of the image here</div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <p class="mt-3 fs-6">This example use media queries to re-arrange the images on different screen sizes: for
+            screens larger than 700px wide, it will show four images side by side, for screens smaller than 700px, it
+            will show two images side by side. For screens smaller than 500px, the images will stack vertically
+            (100%).</p>
+    </div>
+</div>
+<script src="js/bootstrap.js"></script>
+</body>
+</html>
