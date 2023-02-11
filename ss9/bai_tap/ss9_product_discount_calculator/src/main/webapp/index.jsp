@@ -19,7 +19,7 @@
 </head>
 <body>
 <h1 class="text-center">Product Discount Calculator</h1>
-<form action="/calculatorServlet" method="get">
+<form action="/calculator-servlet" method="get">
   <div class="text-center">
     <div>
       <label for="productDescription">Product Description : </label>

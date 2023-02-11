@@ -11,12 +11,12 @@
     <title>Title</title>
 </head>
 <body>
-<form action="/calculatorServlet" method="get">
-    <h2>${n1}</h2>
-    <h2>${n2}</h2>
-    <h2>${n3}</h2>
-    <h2>${n4}</h2>
-    <h2>${n5}</h2>
+<form action="/calculator-servlet" method="get">
+    <h2>${product}</h2>
+    <h2>${price}</h2>
+    <h2>${percent}</h2>
+    <h2>${amount}</h2>
+    <h2>${total}</h2>
 </form>
 </body>
 </html>
