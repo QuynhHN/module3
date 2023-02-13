@@ -39,16 +39,30 @@ public class ProductServlet extends HttpServlet {
                 break;
         }
     }
-
+    private void create(HttpServletRequest request, HttpServletResponse response) {
+        String name = request.getParameter("name");
+        String price = request.getParameter("price");
+        String productDescription = request.getParameter("product-description");
+        String producer = request.getParameter("producer");
+        List<Product> productList = iProductService.display();
+        int id=productList.size()+1;
+        Product product = new Product(id, name, price, productDescription, producer);
+        iProductService.save(product);
+        RequestDispatcher dispatcher = request.getRequestDispatcher("view/create.jsp");
+        request.setAttribute("message", "New product was created");
+        try {
+            dispatcher.forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private void view(HttpServletRequest request, HttpServletResponse response) {
     }
 
     private void delete(HttpServletRequest request, HttpServletResponse response) {
     }
-
-    private void create(HttpServletRequest request, HttpServletResponse response) {
-    }
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
@@ -84,13 +98,19 @@ public class ProductServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
-
+    private void showCreate(HttpServletRequest request, HttpServletResponse response) {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("view/create.jsp");
+        try {
+            dispatcher.forward(request, response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     private void showDelete(HttpServletRequest request, HttpServletResponse response) {
     }
 
     private void showEdit(HttpServletRequest request, HttpServletResponse response) {
-    }
-
-    private void showCreate(HttpServletRequest request, HttpServletResponse response) {
     }
 }
