@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
   User: DELL
@@ -9,14 +10,16 @@
 <html>
 <head>
     <title>User Management Application</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap.css">
 </head>
 <body>
-<center>
+<div class="center" >
     <h1>User Management</h1>
     <h2>
         <a href="users?action=users">List All Users</a>
     </h2>
-</center>
+</div>
 <div align="center">
     <form method="post">
         <table border="1" cellpadding="5">
