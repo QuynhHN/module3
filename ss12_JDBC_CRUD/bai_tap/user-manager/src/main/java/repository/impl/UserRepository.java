@@ -9,23 +9,6 @@ import java.util.Comparator;
 import java.util.List;
 
 public class UserRepository implements IUserRepository {
-    private static String jdbcURL = "jdbc:mysql://localhost:3306/demo";
-    private static String jdbcUsername = "root";
-    private static String jdbcPassword = "904719";
-    private static Connection connection;
-
-    public static Connection getConnection() {
-        if (connection == null) {
-            try {
-                Class.forName("com.mysql.jdbc.Driver");
-                connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        return connection;
-    }
-
     private static final String INSERT_USERS_SQL = "INSERT INTO users (name, email, country) VALUES (?, ?, ?);";
     private static final String SELECT_USER_BY_ID = "select id,name,email,country from users where id =?";
     private static final String SELECT_ALL_USERS = "select * from users";
@@ -35,7 +18,9 @@ public class UserRepository implements IUserRepository {
     @Override
     public void insertUser(User user) throws SQLException {
         System.out.println(INSERT_USERS_SQL);
-        try (Connection connection = getConnection(); PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL)) {
+        try {
+            Connection connection = BaseRepository.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USERS_SQL);
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getEmail());
             preparedStatement.setString(3, user.getCountry());
@@ -50,16 +35,16 @@ public class UserRepository implements IUserRepository {
     public User selectUser(int id) {
         User user = null;
         // Step 1: Establishing a Connection
-        try (Connection connection = getConnection();
+        try (Connection connection = BaseRepository.getConnection();
              // Step 2:Create a statement using connection object
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_USER_BY_ID);) {
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT_USER_BY_ID")) {
             preparedStatement.setInt(1, id);
             System.out.println(preparedStatement);
             // Step 3: Execute the query or update query
             ResultSet rs = preparedStatement.executeQuery();
 
             // Step 4: Process the ResultSet object.
-            while (rs.next()) {
+            if (rs.next()) {
                 String name = rs.getString("name");
                 String email = rs.getString("email");
                 String country = rs.getString("country");
@@ -76,10 +61,10 @@ public class UserRepository implements IUserRepository {
 // using try-with-resources to avoid closing resources (boiler plate code)
         List<User> users = new ArrayList<>();
         // Step 1: Establishing a Connection
-        try (Connection connection = getConnection();
-
-             // Step 2:Create a statement using connection object
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS);) {
+        try {
+            Connection connection = BaseRepository.getConnection();
+            // Step 2:Create a statement using connection object
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_USERS);
             System.out.println(preparedStatement);
             // Step 3: Execute the query or update query
             ResultSet rs = preparedStatement.executeQuery();
@@ -100,24 +85,32 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public boolean deleteUser(int id) throws SQLException {
-        boolean rowDeleted;
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(DELETE_USERS_SQL);) {
+        boolean rowDeleted = false;
+        try {
+            Connection connection = BaseRepository.getConnection();
+            PreparedStatement statement = connection.prepareStatement(DELETE_USERS_SQL);
             statement.setInt(1, id);
             rowDeleted = statement.executeUpdate() > 0;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
         return rowDeleted;
     }
 
     @Override
     public boolean updateUser(User user) throws SQLException {
-        boolean rowUpdated;
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(UPDATE_USERS_SQL);) {
+        boolean rowUpdated = false;
+        try {
+            Connection connection = BaseRepository.getConnection();
+            PreparedStatement statement = connection.prepareStatement(UPDATE_USERS_SQL);
             statement.setString(1, user.getName());
             statement.setString(2, user.getEmail());
             statement.setString(3, user.getCountry());
             statement.setInt(4, user.getId());
 
             rowUpdated = statement.executeUpdate() > 0;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
         return rowUpdated;
     }
@@ -143,9 +136,7 @@ public class UserRepository implements IUserRepository {
         users.sort((Comparator.comparing(user -> ((User) user).getName())
                 .thenComparingInt(user -> ((User) user).getId())));
         return users;
-        // ở đây xong rồi còn servlet với view
     }
-
 
     private void printSQLException(SQLException ex) {
         for (Throwable e : ex) {

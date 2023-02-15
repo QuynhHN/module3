@@ -64,8 +64,10 @@ public class UserServlet extends HttpServlet {
                     break;
                 case "search":
                     search(request, response);
+                    break;
                 case "sort":
                     sortList(request, response);
+                    break;
                 default:
                     listUser(request, response);
                     break;
@@ -76,6 +78,7 @@ public class UserServlet extends HttpServlet {
     }
     private void listUser(HttpServletRequest request, HttpServletResponse response)
             throws SQLException, IOException, ServletException {
+
         List<User> listUser = userService.selectAllUsers();
         request.setAttribute("listUser", listUser);
         RequestDispatcher dispatcher = request.getRequestDispatcher("view/list.jsp");

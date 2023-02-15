@@ -12,3 +12,5 @@ insert into users(name, email, country) values('Minh','minh@codegym.vn','Viet Na
 insert into users(name, email, country) values('Kante','kante@che.uk','Kenia');
 
 drop database demo;
+
+select id,name,email,country from users where id =? ;
